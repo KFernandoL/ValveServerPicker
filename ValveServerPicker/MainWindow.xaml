@@ -12,6 +12,7 @@
     ShowMaxRestoreButton="False"
     ShowMinButton="False"
     ShowTitleBar="False"
+    ResizeMode="NoResize"
     Title="ValveServerPicker">
 
     <Window.Resources>
@@ -36,7 +37,7 @@
             Height="40px"
             VerticalAlignment="Top"
             Background="#66000000"
-            MouseLeftButtonDown="titleBar_MouseLeftButtonDown">
+            MouseLeftButtonDown="titleBar_MouseLeftButtonDown" Grid.ColumnSpan="2">
             <Label
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -72,6 +73,34 @@
                 Style="{DynamicResource MahApps.Styles.Button.Circle}" />
         </Grid>
 
+        <!--- Header top -->
+        <Grid VerticalAlignment="top" Margin="0,40,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Nombre" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Left"></Label>
+            <Label Grid.Column="1" Content="Ping" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Label Grid.Column="2" Content="TF2" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Label Grid.Column="3" Content="CSGO" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
+            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
+            <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
+            <Border Grid.Column="3" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
+        </Grid>
+
+        <!---Servers Contenedor-->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Margin="0,80,0,40">
+            <StackPanel x:Name="ServersContenedor" Orientation="Vertical">
+            </StackPanel>
+        </ScrollViewer>
+        <mah:ProgressRing x:Name="CargandoIcon" Visibility="Collapsed" Foreground="#FFF" IsActive="True" />
+
+        <Grid Background="#66000000" VerticalAlignment="Bottom" Height="40px">
+            <TextBlock Text="By KAOSNox" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" FontSize="14" Margin="0,0,20,0" />
+        </Grid>
 
     </Grid>
 </mah:MetroWindow>
