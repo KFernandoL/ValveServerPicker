@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace ValveServerPicker.Models
+namespace ValveServerPicker.Models.UI
 {
     public class ServersApp
     {
