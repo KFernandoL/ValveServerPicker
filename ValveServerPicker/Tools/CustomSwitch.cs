@@ -11,17 +11,17 @@ namespace ValveServerPicker.Tools
 {
     public class CustomSwitch
     {
-        public static ToggleSwitch SwitchServer(bool isOn)
+        public static ToggleSwitch SwitchServer(string game, int index, bool isOn)
         {
             return new ToggleSwitch
             {
                 MinWidth = 0,
-                IsOn = isOn,
+                IsOn = true,
                 OffContent = "",
                 OnContent = "",
                 ContentDirection = FlowDirection.LeftToRight,
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
         }
     }

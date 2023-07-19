@@ -25,12 +25,24 @@ namespace ValveServerPicker.Tools
             };
         }
 
+        public static Label LabelPing()
+        {
+            return new Label
+            {
+                Content = "0",
+                Foreground = Brushes.Black,
+                FontSize = 16,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+        }
+
         public static Label LabelPing(int ping)
         {
             SolidColorBrush? ForegoundColor = (ping < 60 ? Brushes.GreenYellow : (ping > 60 && ping < 120) ? Brushes.Yellow : Brushes.Red);
             return new Label
             {
-                Content = ping,
+                Content = $"{ping}",
                 Foreground = ForegoundColor,
                 FontSize = 16,
                 VerticalAlignment = VerticalAlignment.Center,

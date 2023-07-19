@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ValveServerPicker.Models;
+using ValveServerPicker.Models.Web;
 using ValveServerPicker.Servicesasd;
 using ValveServerPicker.Tools;
 
@@ -33,6 +35,9 @@ namespace ValveServerPicker
         private readonly BitmapImage imgCSGOSelected = new BitmapImage(new Uri("pack://application:,,,/img/csgo-select.png"));
         private readonly BitmapImage imgCSGOUnselected = new BitmapImage(new Uri("pack://application:,,,/img/csgo.png"));
 
+        public RootObject serversTF2;
+        public RootObject CSGO;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -42,8 +47,25 @@ namespace ValveServerPicker
 
         public async void LoadServers()
         {
-            var serversTF2 = await SteamServersServices.getTF2Servers();
-            var CSGO = await SteamServersServices.getTF2Servers();
+            try
+            {
+                serversTF2 = await SteamServersServices.getTF2Servers();
+                CSGO = await SteamServersServices.getTF2Servers();
+
+                foreach (var server in serversTF2.Pops.Values)
+                {
+                    var ip = server.Relays != null ? server.Relays[0].IPv4 : "0.0.0.0";
+                    var row = CustomRows.CreateRow("TF2", server.Desc, ip, 0, true);
+                    await Dispatcher.InvokeAsync(() => ServersContenedor.Children.Add(row));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error LoadServers");
+            }
+
+
+
         }
 
         #region Custom titleBar actions
