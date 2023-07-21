@@ -103,13 +103,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <!--Btn TF2-->
-            <Button x:Name="MenuTF2" Grid.Column="0" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuTF2_MouseClick" MouseEnter="MenuTF2_MouseEnter" MouseLeave="MenuTF2_MouseLeave">
+            <Button x:Name="MenuTF2" Grid.Column="0" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuTF2_MouseClick" MouseEnter="MenuTF2_MouseEnter" MouseLeave="MenuTF2_MouseLeave" BorderBrush="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="/img/tf2-select.png" Stretch="Uniform" TileMode="None"/>
                 </Button.Background>
             </Button>
             <!--Btn CSGO-->
-            <Button x:Name="MenuCSGO" Grid.Column="1" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuCSGO_MouseClick" MouseEnter="MenuCSGO_MouseEnter" MouseLeave="MenuCSGO_MouseLeave" >
+            <Button x:Name="MenuCSGO" Grid.Column="1" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuCSGO_MouseClick" MouseEnter="MenuCSGO_MouseEnter" MouseLeave="MenuCSGO_MouseLeave" Foreground="{x:Null}" BorderBrush="{x:Null}" >
                 <Button.Background>
                     <ImageBrush ImageSource="/img/csgo.png" Stretch="Uniform" TileMode="None"/>
                 </Button.Background>

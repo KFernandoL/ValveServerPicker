@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -54,8 +55,7 @@ namespace ValveServerPicker
 
                 foreach (var server in serversTF2.Pops.Values)
                 {
-                    var ip = server.Relays != null ? server.Relays[0].IPv4 : "0.0.0.0";
-                    var row = CustomRows.CreateRow("TF2", server.Desc, ip, 0, true);
+                    var row = CustomRows.CreateRow("TF2", server.Desc, server.Relays, 0, true);
                     await Dispatcher.InvokeAsync(() => ServersContenedor.Children.Add(row));
                 }
             }

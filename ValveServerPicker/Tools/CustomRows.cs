@@ -7,13 +7,16 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Documents;
 using ValveServerPicker.Helpers;
+using ValveServerPicker.Models.Web;
 
 namespace ValveServerPicker.Tools
 {
     public class CustomRows
     {
-        public static Grid CreateRow(string game, string serverName, string ip, int indice, bool status)
+        public static Grid CreateRow(string game, string serverName, List<Relay>? server, int indice, bool status)
         {
+            var ip = server != null ? server[0].IPv4 : "0.0.0.0";
+
             Grid grid = new Grid();
 
             // Crea las columnas
@@ -38,9 +41,9 @@ namespace ValveServerPicker.Tools
             Grid.SetColumn(col2, 1);
             new AutoUpdatePing().AutoPing(col2, ip);
 
-            var col3 = CustomSwitch.SwitchServer(game, indice, status);
+            bool serverRuleExist = FirewallHelper.RuleExist(game, serverName);
+            var col3 = CustomSwitch.SwitchServer(game, serverName, server, serverRuleExist);
             Grid.SetColumn(col3, 2);
-            col3.Toggled += (sender, args) => { Console.WriteLine("togle"); };
 
             grid.Children.Add(col1);
             grid.Children.Add(col2);

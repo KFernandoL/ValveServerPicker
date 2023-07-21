@@ -10,7 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <!-- Theme setting -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Red.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOff" Color="White" />
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOffPointerOver" Color="White" />
