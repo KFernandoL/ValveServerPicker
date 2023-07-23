@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ValveServerPicker.Helpers;
 using ValveServerPicker.Models;
 using ValveServerPicker.Models.Web;
 using ValveServerPicker.Servicesasd;
@@ -36,37 +37,56 @@ namespace ValveServerPicker
         private readonly BitmapImage imgCSGOSelected = new BitmapImage(new Uri("pack://application:,,,/img/csgo-select.png"));
         private readonly BitmapImage imgCSGOUnselected = new BitmapImage(new Uri("pack://application:,,,/img/csgo.png"));
 
+        //Games Routes
+        private string TF2Path = SteamGameFinder.FindExeAsync("Team Fortress 2", "hl2.exe").GetAwaiter().GetResult();
+        private string CSGOPath = SteamGameFinder.FindExeAsync("Counter-Strike Global Offensive", "csgo.exe").GetAwaiter().GetResult();
+
         public RootObject serversTF2;
-        public RootObject CSGO;
+        public RootObject serversCSGO;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            LoadServers();
+            LoadServers("TF2").GetAwaiter();
         }
 
-        public async void LoadServers()
+        public async Task LoadServers(string gameContainer)
         {
             try
             {
-                serversTF2 = await SteamServersServices.getTF2Servers();
-                CSGO = await SteamServersServices.getTF2Servers();
+                serversTF2 = await SteamServersServices.getTF2ServersAsync();
+                serversCSGO = await SteamServersServices.getTF2ServersAsync();
 
-                foreach (var server in serversTF2.Pops.Values)
+                //var Rows = await Task.WhenAll(CreateRowsAsync(serversTF2, "TF2"), CreateRowsAsync(serversCSGO, "CSGO"));
+
+                var RowsTF2 = await CreateRowsAsync(serversTF2, "TF2", TF2Path);
+                var RowsCSGO = await CreateRowsAsync(serversCSGO, "CSGO", CSGOPath);
+
+                foreach (var row in RowsTF2)
                 {
-                    var row = CustomRows.CreateRow("TF2", server.Desc, server.Relays, 0, true);
-                    await Dispatcher.InvokeAsync(() => ServersContenedor.Children.Add(row));
+                    Dispatcher.InvokeAsync(() => ServersTF2Contenedor.Children.Add(row));
                 }
+                foreach (var row in RowsCSGO)
+                {
+                    Dispatcher.InvokeAsync(() => ServersCSGOContenedor.Children.Add(row));
+                }
+                //
+                ServerTF2ScrollView.Visibility = Visibility.Visible;
+                Loading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error LoadServers");
             }
-
-
-
         }
+
+        private async Task<List<Grid>> CreateRowsAsync(RootObject servers, string gameServersName, string gamePath)
+        {
+            var tasks = servers.Pops.Values.Select(server => CustomRows.CreateRowAsync(gameServersName, gamePath, server.Desc, server.Relays));
+            var grids = await Task.WhenAll(tasks);
+            return grids.ToList();
+        }
+
 
         #region Custom titleBar actions
         private void btnCerrar_MouseClick(object sender, RoutedEventArgs e)
@@ -89,13 +109,15 @@ namespace ValveServerPicker
         //Click izquierdo al icono de tf2 en el menu
         private void MenuTF2_MouseClick(object sender, RoutedEventArgs e)
         {
-            MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Selected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-            MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-            // await OcularContenedor();
-            // menuOpcionSelect = 0;
-            // await ReglasActivas();
-            // await serversFila.UpdateSwitchs(serversBloqueados);
-            // await MostrarContenedor();
+
+            if (menuSelected == 1)
+            {
+                menuSelected = 0;
+                MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Selected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                ServerTF2ScrollView.Visibility = Visibility.Visible;
+                ServerCSGOScrollView.Visibility = Visibility.Hidden;
+            }
         }
 
 
@@ -108,22 +130,51 @@ namespace ValveServerPicker
         //Click izquierdo al icono de csgo en el menu
         private void MenuCSGO_MouseClick(object sender, RoutedEventArgs e)
         {
-            /*  await OcularContenedor();
-              
-              menuOpcionSelect = 1;
-              await ReglasActivas();
-              await serversFila.UpdateSwitchs(serversBloqueados);
-              await MostrarContenedor();*/
-            MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Unselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-            MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+            if (menuSelected == 0)
+            {
+                menuSelected = 1;
+                MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Unselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                ServerTF2ScrollView.Visibility = Visibility.Hidden;
+                ServerCSGOScrollView.Visibility = Visibility.Visible;
+            }
         }
 
 
         //Mouse encima del icono de csgo en el menu
-        private void MenuCSGO_MouseEnter(object sender, MouseEventArgs e) { MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform }; }
+        private void MenuCSGO_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+            if (menuSelected == 0)
+            {
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Foreground = null;
+                MenuCSGO.BorderBrush = null;
+            }
+            else
+            {
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Foreground = null;
+                MenuCSGO.BorderBrush = null;
+            }
+        }
 
         //Mouse sale del icono de csgo en el menu
-        private void MenuCSGO_MouseLeave(object sender, MouseEventArgs e) { MenuCSGO.Background = menuSelected == 1 ? new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform } : new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform }; }
+        private void MenuCSGO_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (menuSelected == 1)
+            {
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Foreground = null;
+                MenuCSGO.BorderBrush = null;
+            }
+            else
+            {
+                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                MenuCSGO.Foreground = null;
+                MenuCSGO.BorderBrush = null;
+            }
+        }
 
         #endregion
 

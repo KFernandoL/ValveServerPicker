@@ -4,18 +4,33 @@
              xmlns:local="clr-namespace:ValveServerPicker"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <!-- Theme setting -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Red.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOff" Color="White" />
-            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOffPointerOver" Color="White" />
+            <!--Fill Switch Off-->
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOff" Color="Transparent" />
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOffPointerOver" Color="Transparent" />
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOffPressed" Color="Red" />
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOffDisabled" Color="Red" />
+            <!--Fill Switch On-->
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOn" Color="Red" />
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOnPointerOver" Color="Red" />
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOnPressed" Color="Red" />
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOnDisabled" Color="Red" />
+            <!--Borders Switch Custom-->
+            <!--Borders Switch Off-->
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOff" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOffPointerOver" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOffPressed" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOffDisabled" Color="White"/>
+            <!--Borders Switch On-->
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOn" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOnPointerOver" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOnPressed" Color="White"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOnDisabled" Color="White"/>
+            <!--Knob Switch Custom-->
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOff" Color="Black"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOn" Color="White"/>
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

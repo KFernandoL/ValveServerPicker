@@ -18,7 +18,7 @@ namespace ValveServerPicker.Servicesasd
         private static Uri ServersTF2 = new Uri("https://api.steampowered.com/ISteamApps/GetSDRConfig/v1?appid=440");
         private static Uri ServerCSGO = new Uri("https://api.steampowered.com/ISteamApps/GetSDRConfig/v1?appid=730");
 
-        public static async Task<RootObject> getTF2Servers()
+        public static async Task<RootObject> getTF2ServersAsync()
         {
 
             var jsonTF2Server = await getJsonFromUrlAsync(ServersTF2);
@@ -26,7 +26,7 @@ namespace ValveServerPicker.Servicesasd
             return JsonSerializer.Deserialize<RootObject>(jsonTF2Server);
         }
 
-        public static async Task<RootObject> getCSGOServer()
+        public static async Task<RootObject> getCSGOServerAsync()
         {
             var jsonCSGOServer = await getJsonFromUrlAsync(ServerCSGO);
 

@@ -12,9 +12,9 @@ namespace ValveServerPicker.Tools
     public class CustomLabels
     {
 
-        public static Label LabelName(string content)
+        public static async Task<Label> LabelNameAsync(string content)
         {
-            return new Label
+            Label newLabel = new Label
             {
                 Content = content,
                 Foreground = Brushes.White,
@@ -23,11 +23,14 @@ namespace ValveServerPicker.Tools
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left
             };
+
+            await Task.Delay(5);
+            return newLabel;
         }
 
-        public static Label LabelPing()
+        public static async Task<Label> LabelPingAsync()
         {
-            return new Label
+            Label newLabel = new Label
             {
                 Content = "0",
                 Foreground = Brushes.Black,
@@ -35,6 +38,9 @@ namespace ValveServerPicker.Tools
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center
             };
+
+            await Task.Delay(5);
+            return newLabel;
         }
 
         public static Label LabelPing(int ping)

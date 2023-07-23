@@ -15,7 +15,7 @@ namespace ValveServerPicker.Helpers
 {
     public class FirewallHelper
     {
-        public static void CreateRule(string gameName, string servername, List<Relay> relays)
+        public static void CreateRule(string gameName, string gamePath, string servername, List<Relay> relays)
         {
             List<ushort> ports = new List<ushort>();
             List<IAddress> IPs = new List<IAddress>();
@@ -30,14 +30,14 @@ namespace ValveServerPicker.Helpers
             }
             ushort[] portsNoDuplicate = ports.Distinct().ToArray();
 
-            AddRule(gameName, servername, IPs.ToArray(), portsNoDuplicate);
+            AddRule(gameName, gamePath, servername, IPs.ToArray(), portsNoDuplicate);
 
 
         }
 
-        public static void AddRule(string gameName, string serverName, IAddress[] IPs, ushort[] ports)
+        public static void AddRule(string gameName, string gamePath, string serverName, IAddress[] IPs, ushort[] ports)
         {
-            var rule2 = FirewallManager.Instance.CreateApplicationRule($"Block Server {gameName} - {serverName}", "tf2.exe");
+            var rule2 = FirewallManager.Instance.CreateApplicationRule($"Block Server {gameName} - {serverName}", gamePath);
             rule2.IsEnable = true;
             rule2.Protocol = FirewallProtocol.UDP;
             rule2.Direction = FirewallDirection.Outbound;
@@ -47,32 +47,6 @@ namespace ValveServerPicker.Helpers
             rule2.RemoteAddresses = IPs;
 
             FirewallManager.Instance.Rules.Add(rule2);
-
-            /* var rule = new FirewallWASRule(
-                 "Hola",
-                 FirewallAction.Block,
-                 FirewallDirection.Outbound,
-                 FirewallProfiles.Public);*/
-            /*{
-                 Name = "MiReglaFirewall",
-                 Action = FirewallAction.Block,
-                 Direction = FirewallDirection.Outbound
-             };*/
-
-            //firewallManager.Rules.Add(rule);
-
-            /*Type tNetFwPolicy2 = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
-            INetFwPolicy2 fwPolicy2 = (INetFwPolicy2)Activator.CreateInstance(tNetFwPolicy2);
-            // Let's create a new rule
-            INetFwRule2 inboundRule = (INetFwRule2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FWRule"));
-            inboundRule.Enabled = true;
-            //Allow through firewall
-            inboundRule.Action = NET_FW_ACTION_.NET_FW_ACTION_BLOCK;
-            inboundRule.Protocol = 17; // UDP
-            inboundRule.Direction = NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT;
-            inboundRule.RemoteAddresses = await IpRangetoString(Servers[indice].Server);
-            inboundRule.RemotePorts = await PortsRangetoString(Servers[indice].Server);
-            inboundRule.Name = $"Block Server {MainWindow.gameNameSelect[MainWindow.menuOpcionSelect]} - {Servers[indice].ServerName}";*/
         }
 
         public static List<ushort> PortsList(ushort firstPort, ushort lastPort)
@@ -92,20 +66,29 @@ namespace ValveServerPicker.Helpers
             return (lastPort - firstPort) + 1;
         }
 
-        public static bool RuleExist(string gameName, string serverName)
+        public static async Task<bool> RuleExistAsync(string gameName, string serverName)
         {
             string ruleName = $"Block Server {gameName} - {serverName}";
-            var allRules = FirewallManager.Instance.Rules.ToList();
-            var rule = allRules.FirstOrDefault(x => x.Name == ruleName);
-            if (rule != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            // Utilizamos un método asincrónico específico para buscar la regla
+            var rule = await Task.Run(() => FindRule(ruleName));
+
+            // Verificamos si la regla existe
+            return rule != null;
         }
+
+        // Método de búsqueda de la regla específico que se ejecutará en otro hilo
+        private static IFirewallRule FindRule(string ruleName)
+        {
+            // Obtenemos todas las reglas de manera síncrona
+            var allRules = FirewallManager.Instance.Rules;
+
+            // Buscamos la regla utilizando LINQ (síncrono)
+            var rule = allRules.FirstOrDefault(x => x.Name == ruleName);
+
+            return rule;
+        }
+
 
         public static void DeleteRule(string gameName, string serverName)
         {

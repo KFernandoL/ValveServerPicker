@@ -1,18 +1,18 @@
 ﻿<mah:MetroWindow
     x:Class="ValveServerPicker.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="400"
     Height="800"
     mc:Ignorable="d"
+    ResizeMode="NoResize"
     ShowCloseButton="False"
     ShowMaxRestoreButton="False"
     ShowMinButton="False"
     ShowTitleBar="False"
-    ResizeMode="NoResize"
     Title="ValveServerPicker">
 
     <Window.Resources>
@@ -27,17 +27,18 @@
 
     <Grid>
         <Grid.Background>
-            <LinearGradientBrush EndPoint="0.9,0.9" StartPoint="0.1,0.1">
-                <GradientStop Color="#FF3494E6" Offset="-0.3"/>
-                <GradientStop Color="#FFEC6EAD" Offset="1.3"/>
+            <LinearGradientBrush StartPoint="0.1,0.1" EndPoint="0.9,0.9">
+                <GradientStop Offset="-0.3" Color="#FF3494E6" />
+                <GradientStop Offset="1.3" Color="#FFEC6EAD" />
             </LinearGradientBrush>
         </Grid.Background>
         <Grid
             x:Name="titleBar"
+            Grid.ColumnSpan="2"
             Height="40px"
             VerticalAlignment="Top"
             Background="#66000000"
-            MouseLeftButtonDown="titleBar_MouseLeftButtonDown" Grid.ColumnSpan="2">
+            MouseLeftButtonDown="titleBar_MouseLeftButtonDown">
             <Label
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -54,9 +55,9 @@
                 VerticalAlignment="Center"
                 Background="#FFFAE800"
                 BorderBrush="{x:Null}"
+                Click="btnMinimizar_MouseClick"
                 MouseEnter="btnMinimizar_MouseEnter"
                 MouseLeave="btnMinimizar_MouseLeave"
-                Click="btnMinimizar_MouseClick"
                 Style="{DynamicResource MahApps.Styles.Button.Circle}" />
             <Button
                 x:Name="btnCerrar"
@@ -67,58 +68,138 @@
                 VerticalAlignment="Center"
                 Background="#FFFC4850"
                 BorderBrush="{x:Null}"
+                Click="btnCerrar_MouseClick"
                 MouseEnter="btnCerrar_MouseEnter"
                 MouseLeave="btnCerrar_MouseLeave"
-                Click="btnCerrar_MouseClick"
                 Style="{DynamicResource MahApps.Styles.Button.Circle}" />
         </Grid>
 
         <!--- Header top -->
-        <Grid VerticalAlignment="top" Margin="0,40,0,0">
+        <Grid Margin="0,40,0,0" VerticalAlignment="top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Nombre" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Left"></Label>
-            <Label Grid.Column="1" Content="Ping" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-            <Label Grid.Column="2" Content="Status" Foreground="White" FontSize="22px" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
-            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
-            <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0 0 0 1"></Border>
+            <Label
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="Nombre"
+                FontSize="22px"
+                FontWeight="SemiBold"
+                Foreground="White" />
+            <Label
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Ping"
+                FontSize="22px"
+                FontWeight="SemiBold"
+                Foreground="White" />
+            <Label
+                Grid.Column="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Status"
+                FontSize="22px"
+                FontWeight="SemiBold"
+                Foreground="White" />
+            <Border
+                Grid.Column="0"
+                BorderBrush="Black"
+                BorderThickness="0 0 0 1" />
+            <Border
+                Grid.Column="1"
+                BorderBrush="Black"
+                BorderThickness="0 0 0 1" />
+            <Border
+                Grid.Column="2"
+                BorderBrush="Black"
+                BorderThickness="0 0 0 1" />
         </Grid>
 
-        <!---Servers Contenedor-->
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Margin="0,80,0,80">
-            <StackPanel x:Name="ServersContenedor" Orientation="Vertical">
-            </StackPanel>
+        <!---Servers TF2 Contenedor-->
+        <ScrollViewer x:Name="ServerTF2ScrollView" Margin="0,80,0,80" HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
+            <StackPanel x:Name="ServersTF2Contenedor" Orientation="Vertical" />
         </ScrollViewer>
-        <mah:ProgressRing x:Name="CargandoIcon" Visibility="Collapsed" Foreground="#FFF" IsActive="True" />
+
+        <!---Servers CSGO Contenedor-->
+        <ScrollViewer x:Name="ServerCSGOScrollView" Margin="0,80,0,80" HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
+            <StackPanel x:Name="ServersCSGOContenedor" Orientation="Vertical" />
+        </ScrollViewer>
+
+        <mah:ProgressRing
+            x:Name="Loading"
+            Foreground="#FFF"
+            IsActive="True"
+             />
         <!--Menu -->
 
         <!--Menu -->
-        <Grid x:Name="menuValveGames" Background="#66000000" Height="50px" VerticalAlignment="Bottom" Margin="0,40,0,30">
+        <Grid
+            x:Name="menuValveGames"
+            Height="50px"
+            Margin="0,40,0,30"
+            VerticalAlignment="Bottom"
+            Background="#66000000">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!--Btn TF2-->
-            <Button x:Name="MenuTF2" Grid.Column="0" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuTF2_MouseClick" MouseEnter="MenuTF2_MouseEnter" MouseLeave="MenuTF2_MouseLeave" BorderBrush="{x:Null}">
+            <Button
+                x:Name="MenuTF2"
+                Grid.Column="0"
+                Width="100"
+                Height="40px"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BorderBrush="{x:Null}"
+                Click="MenuTF2_MouseClick"
+                MouseEnter="MenuTF2_MouseEnter"
+                MouseLeave="MenuTF2_MouseLeave">
                 <Button.Background>
-                    <ImageBrush ImageSource="/img/tf2-select.png" Stretch="Uniform" TileMode="None"/>
+                    <ImageBrush
+                        ImageSource="/img/tf2-select.png"
+                        Stretch="Uniform"
+                        TileMode="None" />
                 </Button.Background>
             </Button>
             <!--Btn CSGO-->
-            <Button x:Name="MenuCSGO" Grid.Column="1" Height="40px" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center" Click="MenuCSGO_MouseClick" MouseEnter="MenuCSGO_MouseEnter" MouseLeave="MenuCSGO_MouseLeave" Foreground="{x:Null}" BorderBrush="{x:Null}" >
+            <Button
+                x:Name="MenuCSGO"
+                Grid.Column="1"
+                Width="100"
+                Height="40px"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                BorderBrush="{x:Null}"
+                Click="MenuCSGO_MouseClick"
+                Foreground="{x:Null}"
+                MouseEnter="MenuCSGO_MouseEnter"
+                MouseLeave="MenuCSGO_MouseLeave">
                 <Button.Background>
-                    <ImageBrush ImageSource="/img/csgo.png" Stretch="Uniform" TileMode="None"/>
+                    <ImageBrush
+                        ImageSource="/img/csgo.png"
+                        Stretch="Uniform"
+                        TileMode="None" />
                 </Button.Background>
             </Button>
         </Grid>
         <!--- Creditos  -->
-        <Rectangle VerticalAlignment="Bottom" Height="30px" Margin="0,0,0,0" Fill="#66000000" >
-        </Rectangle>
-        <Label Content="By KAOSNox" Foreground="White" AllowDrop="True" FontSize="20px"  VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <Rectangle
+            Height="30px"
+            Margin="0,0,0,0"
+            VerticalAlignment="Bottom"
+            Fill="#66000000" />
+        <Label
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            AllowDrop="True"
+            Content="By KAOSNox"
+            FontSize="20px"
+            Foreground="White" />
 
     </Grid>
 </mah:MetroWindow>

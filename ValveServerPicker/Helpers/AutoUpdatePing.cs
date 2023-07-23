@@ -10,19 +10,31 @@ namespace ValveServerPicker.Helpers
 {
     public class AutoUpdatePing
     {
-        public void AutoPing(Label pingLabel, string ip)
+        public async Task AutoPingAsync(Label pingLabel, string ip)
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(1000);
-            timer.Tick += (sender, e) => TimerEventProcessor(sender, e, pingLabel, ip).GetAwaiter();
+
+            // Usamos una función lambda asincrónica para el controlador de eventos Tick
+            timer.Tick += async (sender, e) => await TimerEventProcessor(sender, e, pingLabel, ip);
+
             timer.Start();
         }
+
 
         private async Task TimerEventProcessor(object sender, EventArgs e, Label pingLabel, string ip)
         {
 
             long latencia = await Ping(ip);
-            if (latencia < 80)
+            if (latencia <= 0)
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    pingLabel.Foreground = Brushes.Black;
+                    pingLabel.Content = latencia;
+                }));
+            }
+            else if (latencia < 80)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
