@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="img\img\**" />
+    <EmbeddedResource Remove="img\img\**" />
+    <None Remove="img\img\**" />
+    <Page Remove="img\img\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="img\csgo-select.png" />
+    <None Remove="img\csgo.png" />
+    <None Remove="img\tf2-select.png" />
+    <None Remove="img\tf2.png" />
+    <None Remove="tf2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
+    <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\csgo-select.png" />
+    <Resource Include="img\csgo.png" />
+    <Resource Include="img\tf2-select.png" />
+    <Resource Include="img\tf2.png" />
+  </ItemGroup>
+
+</Project>
