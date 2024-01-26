@@ -29,7 +29,9 @@ namespace ValveServerPicker.Helpers
             {
                 string[] possibleSteamPaths = {
                 Path.Combine(path, "Program Files (x86)", "Steam", "steamapps", "common", gameFolderName),
-                Path.Combine(path, "SteamLibrary", "steamapps", "common", gameFolderName)
+                Path.Combine(path, "Program Files (x86)", "Steam", "steamapps", "common", gameFolderName, "game", "bin", "win64"),
+                Path.Combine(path, "SteamLibrary", "steamapps", "common", gameFolderName),
+                Path.Combine(path, "SteamLibrary", "steamapps", "common", gameFolderName, "game", "bin", "win64")
             };
 
                 foreach (var steamPath in possibleSteamPaths)

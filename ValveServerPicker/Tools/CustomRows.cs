@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Documents;
 using ValveServerPicker.Helpers;
 using ValveServerPicker.Models.Web;
+using System.Windows.Media;
 
 namespace ValveServerPicker.Tools
 {
@@ -39,17 +40,33 @@ namespace ValveServerPicker.Tools
             var col3Task = CustomSwitch.SwitchServerAsync(game, gamePath, nameServer, server, await FirewallHelper.RuleExistAsync(game, nameServer));
 
             var col1 = await col1Task;
-            Grid.SetColumn(col1, 0);
-
             var col2 = await col2Task;
-            Grid.SetColumn(col2, 1);
+            var col3 = await col3Task;
+
             await new AutoUpdatePing().AutoPingAsync(col2, ip);
 
-            var col3 = await col3Task;
+            // Agregar bordes blancos a las dos primeras columnas
+            var border1 = new Border
+            {
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(0, 0, 1, 0),
+                Child = col1
+            };
+
+            var border2 = new Border
+            {
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(0, 0, 1, 0),
+                Child = col2
+            };
+
+
+            Grid.SetColumn(border1, 0);
+            Grid.SetColumn(border2, 1);
             Grid.SetColumn(col3, 2);
 
-            grid.Children.Add(col1);
-            grid.Children.Add(col2);
+            grid.Children.Add(border1);
+            grid.Children.Add(border2);
             grid.Children.Add(col3);
 
             return grid;

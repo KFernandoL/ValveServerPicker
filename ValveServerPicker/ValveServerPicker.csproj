@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,11 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="img\csgo-select.png" />
-    <None Remove="img\csgo.png" />
-    <None Remove="img\tf2-select.png" />
+    <None Remove="img\cs2.png" />
     <None Remove="img\tf2.png" />
     <None Remove="tf2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="img\csgo-select.png" />
-    <Resource Include="img\csgo.png" />
-    <Resource Include="img\tf2-select.png" />
-    <Resource Include="img\tf2.png" />
+    <Resource Include="img\cs2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\tf2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

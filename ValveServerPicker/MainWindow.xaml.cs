@@ -30,19 +30,13 @@ namespace ValveServerPicker
     public partial class MainWindow : MetroWindow
     {
         public static int menuSelected = 0;
-        //img ico TF2
-        private readonly BitmapImage imgTF2Selected = new BitmapImage(new Uri("pack://application:,,,/img/tf2-select.png"));
-        private readonly BitmapImage imgTF2Unselected = new BitmapImage(new Uri("pack://application:,,,/img/tf2.png"));
-        //img ico CSGO
-        private readonly BitmapImage imgCSGOSelected = new BitmapImage(new Uri("pack://application:,,,/img/csgo-select.png"));
-        private readonly BitmapImage imgCSGOUnselected = new BitmapImage(new Uri("pack://application:,,,/img/csgo.png"));
 
         //Games Routes
         private string TF2Path = SteamGameFinder.FindExeAsync("Team Fortress 2", "hl2.exe").GetAwaiter().GetResult();
-        private string CSGOPath = SteamGameFinder.FindExeAsync("Counter-Strike Global Offensive", "csgo.exe").GetAwaiter().GetResult();
+        private string CS2Path = SteamGameFinder.FindExeAsync("Counter-Strike Global Offensive", "cs2.exe").GetAwaiter().GetResult();
 
         public RootObject serversTF2;
-        public RootObject serversCSGO;
+        public RootObject serversCS2;
 
         public MainWindow()
         {
@@ -55,20 +49,20 @@ namespace ValveServerPicker
             try
             {
                 serversTF2 = await SteamServersServices.getTF2ServersAsync();
-                serversCSGO = await SteamServersServices.getTF2ServersAsync();
+                serversCS2 = await SteamServersServices.getCS2ServerAsync();
 
-                //var Rows = await Task.WhenAll(CreateRowsAsync(serversTF2, "TF2"), CreateRowsAsync(serversCSGO, "CSGO"));
+                //var Rows = await Task.WhenAll(CreateRowsAsync(serversTF2, "TF2"), CreateRowsAsync(serversCS2, "CS2"));
 
                 var RowsTF2 = await CreateRowsAsync(serversTF2, "TF2", TF2Path);
-                var RowsCSGO = await CreateRowsAsync(serversCSGO, "CSGO", CSGOPath);
+                var RowsCS2 = await CreateRowsAsync(serversCS2, "CS2", CS2Path);
 
                 foreach (var row in RowsTF2)
                 {
                     Dispatcher.InvokeAsync(() => ServersTF2Contenedor.Children.Add(row));
                 }
-                foreach (var row in RowsCSGO)
+                foreach (var row in RowsCS2)
                 {
-                    Dispatcher.InvokeAsync(() => ServersCSGOContenedor.Children.Add(row));
+                    Dispatcher.InvokeAsync(() => ServersCS2Contenedor.Children.Add(row));
                 }
                 //
                 ServerTF2ScrollView.Visibility = Visibility.Visible;
@@ -113,67 +107,81 @@ namespace ValveServerPicker
             if (menuSelected == 1)
             {
                 menuSelected = 0;
-                MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Selected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                btnTF2Hover.Visibility = Visibility.Visible;
+                btnCS2Hover.Visibility = Visibility.Hidden;
                 ServerTF2ScrollView.Visibility = Visibility.Visible;
-                ServerCSGOScrollView.Visibility = Visibility.Hidden;
+                ServerCS2ScrollView.Visibility = Visibility.Hidden;
             }
         }
 
 
         //Mouse encima del icono de tf2 en el menu
-        private void MenuTF2_MouseEnter(object sender, MouseEventArgs e) { MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Selected, TileMode = TileMode.None, Stretch = Stretch.Uniform }; }
+        private void MenuTF2_MouseEnter(object sender, MouseEventArgs e) { btnTF2Hover.Visibility = Visibility.Visible; }
 
         //Mouse sale del icono de tf2 en el menu
-        private void MenuTF2_MouseLeave(object sender, MouseEventArgs e) { MenuTF2.Background = menuSelected == 0 ? new ImageBrush { ImageSource = imgTF2Selected, TileMode = TileMode.None, Stretch = Stretch.Uniform } : new ImageBrush { ImageSource = imgTF2Unselected, TileMode = TileMode.None, Stretch = Stretch.Uniform }; }
+        private void MenuTF2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            btnTF2Hover.Visibility = menuSelected == 0 ? Visibility.Visible : Visibility.Hidden;
+        }
 
-        //Click izquierdo al icono de csgo en el menu
-        private void MenuCSGO_MouseClick(object sender, RoutedEventArgs e)
+        //Click izquierdo al icono de cs2 en el menu
+        private void MenuCS2_MouseClick(object sender, RoutedEventArgs e)
         {
             if (menuSelected == 0)
             {
                 menuSelected = 1;
-                MenuTF2.Background = new ImageBrush { ImageSource = imgTF2Unselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
+                btnTF2Hover.Visibility = Visibility.Hidden;
+                btnCS2Hover.Visibility = Visibility.Visible;
                 ServerTF2ScrollView.Visibility = Visibility.Hidden;
-                ServerCSGOScrollView.Visibility = Visibility.Visible;
+                ServerCS2ScrollView.Visibility = Visibility.Visible;
             }
         }
 
 
-        //Mouse encima del icono de csgo en el menu
-        private void MenuCSGO_MouseEnter(object sender, MouseEventArgs e)
+        //Mouse encima del icono de cs2 en el menu
+        private void MenuCS2_MouseEnter(object sender, MouseEventArgs e)
         {
 
             if (menuSelected == 0)
             {
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Foreground = null;
-                MenuCSGO.BorderBrush = null;
+                btnCS2Hover.Visibility = Visibility.Visible;
             }
             else
             {
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Foreground = null;
-                MenuCSGO.BorderBrush = null;
+                btnCS2Hover.Visibility = Visibility.Hidden;
             }
         }
 
-        //Mouse sale del icono de csgo en el menu
-        private void MenuCSGO_MouseLeave(object sender, MouseEventArgs e)
+        //Mouse sale del icono de cs2 en el menu
+        private void MenuCS2_MouseLeave(object sender, MouseEventArgs e)
         {
             if (menuSelected == 1)
             {
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOSelected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Foreground = null;
-                MenuCSGO.BorderBrush = null;
+                btnCS2Hover.Visibility = Visibility.Visible;
             }
             else
             {
-                MenuCSGO.Background = new ImageBrush { ImageSource = imgCSGOUnselected, TileMode = TileMode.None, Stretch = Stretch.Uniform };
-                MenuCSGO.Foreground = null;
-                MenuCSGO.BorderBrush = null;
+                btnCS2Hover.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void MainWindows_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Obtener el tamaño de la pantalla actual
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+
+            // Establecer tamaños en porcentaje
+            double widthPercentage = 0.225; // 80% del ancho de la pantalla
+            double heightPercentage = 0.70; // 60% del alto de la pantalla
+
+            // Establecer los tamaños de la ventana en porcentaje de la pantalla
+            this.Width = screenWidth * widthPercentage;
+            this.Height = screenHeight * heightPercentage;
+
+            // Opcional: Centrar la ventana en la pantalla
+            this.Left = (screenWidth - this.Width) / 2;
+            this.Top = (screenHeight - this.Height) / 2;
         }
 
         #endregion

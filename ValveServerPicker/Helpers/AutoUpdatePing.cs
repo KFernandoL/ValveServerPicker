@@ -13,7 +13,7 @@ namespace ValveServerPicker.Helpers
         public async Task AutoPingAsync(Label pingLabel, string ip)
         {
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(1000);
+            timer.Interval = TimeSpan.FromMilliseconds(1200);
 
             // Usamos una función lambda asincrónica para el controlador de eventos Tick
             timer.Tick += async (sender, e) => await TimerEventProcessor(sender, e, pingLabel, ip);

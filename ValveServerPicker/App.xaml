@@ -28,7 +28,7 @@
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOnPressed" Color="White"/>
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOnDisabled" Color="White"/>
             <!--Knob Switch Custom-->
-            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOff" Color="Black"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOff" Color="White"/>
             <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOn" Color="White"/>
         </ResourceDictionary>
 
