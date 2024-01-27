@@ -1,11 +1,15 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.Win32;
+using QueryMaster;
+using QueryMaster.Steam;
 using Serilog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,32 +33,47 @@ namespace ValveServerPicker
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        public static int menuSelected = 0;
+        public enum Game
+        {
+            TF2 = 0,
+            CS2 = 1,
+            L4D2 = 2
+        }
+
+        public static Game menuSelected = Game.TF2;
 
         //Games Routes
         private string TF2Path = SteamGameFinder.FindExeAsync("Team Fortress 2", "hl2.exe").GetAwaiter().GetResult();
         private string CS2Path = SteamGameFinder.FindExeAsync("Counter-Strike Global Offensive", "cs2.exe").GetAwaiter().GetResult();
+        //private string L4D2Path = SteamGameFinder.FindExeAsync("Left 4 Dead 2", "left4dead2.exe").GetAwaiter().GetResult();
 
         public RootObject serversTF2;
         public RootObject serversCS2;
+        //public SteamBrowserServer serversL4D2;
+
+
 
         public MainWindow()
         {
             InitializeComponent();
-            LoadServers("TF2").GetAwaiter();
+            LoadServers().GetAwaiter();
+            //disable left 4 dead 2
+            MenuL4D2.Visibility = Visibility.Hidden;
+            ServerL4D2ScrollView.Visibility = Visibility.Hidden;
+            ServersL4D2Contenedor.Visibility = Visibility.Hidden;
         }
 
-        public async Task LoadServers(string gameContainer)
+        public async Task LoadServers()
         {
             try
             {
                 serversTF2 = await SteamServersServices.getTF2ServersAsync();
                 serversCS2 = await SteamServersServices.getCS2ServerAsync();
+                //serversL4D2 = await SteamServersServices.getL4D2ServerAsync();
 
-                //var Rows = await Task.WhenAll(CreateRowsAsync(serversTF2, "TF2"), CreateRowsAsync(serversCS2, "CS2"));
-
-                var RowsTF2 = await CreateRowsAsync(serversTF2, "TF2", TF2Path);
-                var RowsCS2 = await CreateRowsAsync(serversCS2, "CS2", CS2Path);
+                var RowsTF2 = await CreateRowsAsync(serversTF2, Game.TF2, "TF2", TF2Path);
+                var RowsCS2 = await CreateRowsAsync(serversCS2, Game.CS2, "CS2", CS2Path);
+                //var RowsL4D2 = await CreateRowsAsync(serversL4D2, Game.L4D2, "L4D2", L4D2Path);
 
                 foreach (var row in RowsTF2)
                 {
@@ -64,7 +83,11 @@ namespace ValveServerPicker
                 {
                     Dispatcher.InvokeAsync(() => ServersCS2Contenedor.Children.Add(row));
                 }
-                //
+                /*foreach (var row in RowsL4D2)
+                {
+                    Dispatcher.InvokeAsync(() => ServersL4D2Contenedor.Children.Add(row));
+                }*/
+                //Initial Values
                 ServerTF2ScrollView.Visibility = Visibility.Visible;
                 Loading.Visibility = Visibility.Hidden;
             }
@@ -74,11 +97,51 @@ namespace ValveServerPicker
             }
         }
 
-        private async Task<List<Grid>> CreateRowsAsync(RootObject servers, string gameServersName, string gamePath)
+        private async Task<List<Grid>> CreateRowsAsync(RootObject servers, Game game, string gameServersName, string gamePath)
         {
-            var tasks = servers.Pops.Values.Select(server => CustomRows.CreateRowAsync(gameServersName, gamePath, server.Desc, server.Relays));
+            var tasks = servers.Pops.Values.Select(server => CustomRows.CreateRowAsync(game, gameServersName, gamePath, server.Desc, server.Relays));
             var grids = await Task.WhenAll(tasks);
             return grids.ToList();
+        }
+
+        private async Task<List<Grid>> CreateRowsAsync(SteamBrowserServer servers, Game game, string gameServersName, string gamePath)
+        {
+            List<Grid> grids = new List<Grid>();
+            //regex remove unnecesary data
+            var regex = new Regex(@"\s*\([^)]*\)");
+            var regexRemovePort = new Regex(@":[0-9]+");
+            var regexRemoveValveName = new Regex(@"Valve Left4Dead 2 ");
+            var regexRemoveServerText = new Regex(@" Server");
+            //remove unnecesary data
+            servers.response.servers.ForEach(x => x.name = regex.Replace(x.name, ""));
+            servers.response.servers.ForEach(x => x.name = regexRemoveValveName.Replace(x.name, ""));
+            servers.response.servers.ForEach(x => x.name = regexRemoveServerText.Replace(x.name, ""));
+            servers.response.servers.ForEach(x => x.addr = regexRemovePort.Replace(x.addr, ""));
+            //group by name server
+            var regions = servers.response.servers.GroupBy(x => x.name).Select(x => x.First()).ToList();
+
+            //Create Rows by Regios
+            foreach (var region in regions)
+            {
+                var serverByRegion = servers.response.servers.Where(x => x.name.StartsWith(region.name)).ToList();
+                var groupIpByRegion = serverByRegion.GroupBy(x => x.addr).Select(x => x.First()).ToList();
+
+                //Create relays list
+                List<Relay> relays = new List<Relay>();
+                foreach (var serverByIp in groupIpByRegion)
+                {
+                    relays.Add(new Relay
+                    {
+                        IPv4 = serverByIp.addr,
+                        PortRange = serverByRegion.Where(x => x.addr.StartsWith(serverByIp.addr)).OrderBy(x => x.gameport).DistinctBy(x => x.gameport).Select(x => x.gameport).ToList(),
+                    });
+                }
+
+                var row = await CustomRows.CreateRowAsync(game, gameServersName, gamePath, region.name, relays);
+                grids.Add(row);
+            }
+
+            return grids;
         }
 
 
@@ -99,72 +162,80 @@ namespace ValveServerPicker
         private void btnCerrar_MouseLeave(object sender, MouseEventArgs e) { btnCerrar.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FC4850")); }
         #endregion
 
-        #region efectos de hover y onclick en las opciones del menu
+        #region Button Menu TF2 Events
         //Click izquierdo al icono de tf2 en el menu
         private void MenuTF2_MouseClick(object sender, RoutedEventArgs e)
         {
 
-            if (menuSelected == 1)
+            if (menuSelected != Game.TF2)
             {
-                menuSelected = 0;
-                btnTF2Hover.Visibility = Visibility.Visible;
-                btnCS2Hover.Visibility = Visibility.Hidden;
+                menuSelected = Game.TF2;
+                Grid.SetColumn(btnHoverEffect, (int)Game.TF2);
                 ServerTF2ScrollView.Visibility = Visibility.Visible;
                 ServerCS2ScrollView.Visibility = Visibility.Hidden;
+                ServerL4D2ScrollView.Visibility = Visibility.Hidden;
             }
         }
 
+        private void MenuTF2_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Grid.SetColumn(btnHoverEffect, (int)Game.TF2);
+        }
 
-        //Mouse encima del icono de tf2 en el menu
-        private void MenuTF2_MouseEnter(object sender, MouseEventArgs e) { btnTF2Hover.Visibility = Visibility.Visible; }
-
-        //Mouse sale del icono de tf2 en el menu
         private void MenuTF2_MouseLeave(object sender, MouseEventArgs e)
         {
-            btnTF2Hover.Visibility = menuSelected == 0 ? Visibility.Visible : Visibility.Hidden;
+            Grid.SetColumn(btnHoverEffect, (int)menuSelected);
         }
+        #endregion
 
-        //Click izquierdo al icono de cs2 en el menu
+        #region Button Menu CS2 Events
         private void MenuCS2_MouseClick(object sender, RoutedEventArgs e)
         {
-            if (menuSelected == 0)
+            if (menuSelected != Game.CS2)
             {
-                menuSelected = 1;
-                btnTF2Hover.Visibility = Visibility.Hidden;
-                btnCS2Hover.Visibility = Visibility.Visible;
+                menuSelected = Game.CS2;
+                Grid.SetColumn(btnHoverEffect, (int)Game.CS2);
                 ServerTF2ScrollView.Visibility = Visibility.Hidden;
                 ServerCS2ScrollView.Visibility = Visibility.Visible;
+                ServerL4D2ScrollView.Visibility = Visibility.Hidden;
             }
         }
 
-
-        //Mouse encima del icono de cs2 en el menu
         private void MenuCS2_MouseEnter(object sender, MouseEventArgs e)
         {
+            Grid.SetColumn(btnHoverEffect, 1);
 
-            if (menuSelected == 0)
-            {
-                btnCS2Hover.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                btnCS2Hover.Visibility = Visibility.Hidden;
-            }
         }
 
-        //Mouse sale del icono de cs2 en el menu
         private void MenuCS2_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (menuSelected == 1)
+            Grid.SetColumn(btnHoverEffect, (int)Game.CS2);
+        }
+        #endregion
+
+        #region Button Menu L4D2 Events
+        private void MenuL4D2_Click(object sender, RoutedEventArgs e)
+        {
+            if (menuSelected != Game.L4D2)
             {
-                btnCS2Hover.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                btnCS2Hover.Visibility = Visibility.Hidden;
+                menuSelected = Game.L4D2;
+                Grid.SetColumn(btnHoverEffect, (int)Game.L4D2);
+                ServerTF2ScrollView.Visibility = Visibility.Hidden;
+                ServerCS2ScrollView.Visibility = Visibility.Hidden;
+                ServerL4D2ScrollView.Visibility = Visibility.Visible;
+
             }
         }
+        private void MenuL4D2_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Grid.SetColumn(btnHoverEffect, (int)Game.L4D2);
+        }
 
+        private void MenuL4D2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Grid.SetColumn(btnHoverEffect, (int)menuSelected);
+        }
+        #endregion
         private void MainWindows_Loaded(object sender, RoutedEventArgs e)
         {
             // Obtener el tamaño de la pantalla actual
@@ -184,7 +255,6 @@ namespace ValveServerPicker
             this.Top = (screenHeight - this.Height) / 2;
         }
 
-        #endregion
 
     }
 }

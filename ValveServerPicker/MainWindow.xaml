@@ -102,7 +102,7 @@
                 Grid.Column="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="STATUS"
+                Content="BLOCKED"
                 FontSize="18px"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -128,6 +128,11 @@
         <!---Servers CS2 Contenedor-->
         <ScrollViewer x:Name="ServerCS2ScrollView" Margin="0,110,0,130" HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
             <StackPanel x:Name="ServersCS2Contenedor" Orientation="Vertical" />
+        </ScrollViewer>
+
+        <!---Servers CS2 Contenedor-->
+        <ScrollViewer x:Name="ServerL4D2ScrollView" Margin="0,110,0,130" HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
+            <StackPanel x:Name="ServersL4D2Contenedor" Orientation="Vertical" />
         </ScrollViewer>
 
         <!--Loader -->
@@ -170,9 +175,9 @@
             </Grid.ColumnDefinitions>
             <!--btn TF2 Hover Effect -->
             <Rectangle
-            Name="btnTF2Hover"
-            Height="100px"
-            VerticalAlignment="Bottom" 
+                Name="btnHoverEffect"
+                Height="100px"
+                VerticalAlignment="Bottom" 
                 Grid.Column="0"
             >
                 <Rectangle.Fill>
@@ -197,22 +202,6 @@
                         TileMode="None" ViewboxUnits="RelativeToBoundingBox" Viewbox="0,0,1,1" />
                 </Button.Background>
             </Button>
-
-            <!--btn TF2 Hover Effect -->
-            <Rectangle
-            Name="btnCS2Hover"
-            Height="100px"
-            VerticalAlignment="Bottom" 
-                Grid.Column="1"
-                Visibility="Hidden"
-            >
-                <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#5A6200FF" Offset="1"/>
-                        <GradientStop Color="#000B0B24" Offset="0"/>
-                    </LinearGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
             <!--Btn CS2-->
             <Button
                 x:Name="MenuCS2"
@@ -228,6 +217,23 @@
                         ImageSource="/img/cs2.png"
                         Stretch="Uniform"
                         TileMode="None" />
+                </Button.Background>
+            </Button>
+            <!--Btn L4D2-->
+            <Button
+                 x:Name="MenuL4D2"
+                 Grid.Column="2"
+                 BorderBrush="{x:Null}"
+                 Click="MenuL4D2_Click"
+                 Foreground="{x:Null}"
+                 MouseEnter="MenuL4D2_MouseEnter"
+                 MouseLeave="MenuL4D2_MouseLeave"
+                 Margin="20,20,20,20">
+                <Button.Background>
+                    <ImageBrush
+             ImageSource="/img/l4d2.png"
+             Stretch="Uniform"
+             TileMode="None" />
                 </Button.Background>
             </Button>
         </Grid>

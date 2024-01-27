@@ -9,12 +9,13 @@ using System.Windows.Documents;
 using ValveServerPicker.Helpers;
 using ValveServerPicker.Models.Web;
 using System.Windows.Media;
+using static ValveServerPicker.MainWindow;
 
 namespace ValveServerPicker.Tools
 {
     public class CustomRows
     {
-        public static async Task<Grid> CreateRowAsync(string game, string gamePath, string nameServer, List<Relay>? server)
+        public static async Task<Grid> CreateRowAsync(Game game, string gameName, string gamePath, string nameServer, List<Relay>? server)
         {
             var ip = server != null ? server[0].IPv4 : "127.0.0.1";
 
@@ -37,13 +38,13 @@ namespace ValveServerPicker.Tools
 
             var col1Task = CustomLabels.LabelNameAsync(nameServer);
             var col2Task = CustomLabels.LabelPingAsync();
-            var col3Task = CustomSwitch.SwitchServerAsync(game, gamePath, nameServer, server, await FirewallHelper.RuleExistAsync(game, nameServer));
+            var col3Task = CustomSwitch.SwitchServerAsync(gameName, gamePath, nameServer, server, await FirewallHelper.RuleExistAsync(gameName, nameServer));
 
             var col1 = await col1Task;
             var col2 = await col2Task;
             var col3 = await col3Task;
 
-            await new AutoUpdatePing().AutoPingAsync(col2, ip);
+            await new AutoUpdatePing().AutoPingAsync(col2, ip, game);
 
             // Agregar bordes blancos a las dos primeras columnas
             var border1 = new Border
