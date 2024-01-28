@@ -1,6 +1,5 @@
 # **🔒 TF2 and CS2 Server Blocker 🎮**
 
-![Captura de pantalla 2024-01-23 180631](https://github.com/KFernandoL/ValveServerPicker/assets/61389832/4cb0c0ff-edfc-4942-8b88-7f8667470b6e)
 ![Captura de pantalla 2024-01-23 180650](https://github.com/KFernandoL/ValveServerPicker/assets/61389832/202c3843-4a81-4875-a1a1-113af5248ab4)
 
 This WPF program allows blocking specific servers in Team Fortress 2 and Counter Strike 2 to avoid joining them.
