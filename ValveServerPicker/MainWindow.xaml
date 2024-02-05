@@ -6,14 +6,14 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="400"
-    Height="800"
+    Height="850"
     mc:Ignorable="d"
     ResizeMode="CanResize"
     ShowCloseButton="False"
     ShowMaxRestoreButton="False"
     ShowMinButton="False"
     ShowTitleBar="False"
-    Title="ValveServerPicker"
+    Title="ValveServerBlocker"
     Loaded="MainWindows_Loaded">
 
     <Window.Resources>
@@ -43,7 +43,7 @@
             <Label
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="VALVE SERVER PICKER"
+                Content="VALVE SERVER BLOCKER"
                 FontSize="18px"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -130,7 +130,7 @@
             <StackPanel x:Name="ServersCS2Contenedor" Orientation="Vertical" />
         </ScrollViewer>
 
-        <!---Servers CS2 Contenedor-->
+        <!---Servers L4D2 Contenedor-->
         <ScrollViewer x:Name="ServerL4D2ScrollView" Margin="0,110,0,130" HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
             <StackPanel x:Name="ServersL4D2Contenedor" Orientation="Vertical" />
         </ScrollViewer>
@@ -140,22 +140,49 @@
             x:Name="Loading"
             Foreground="#FFF"
             IsActive="True"
-             />
+            />
 
-        <!--- Creditos  -->
-        <Rectangle
-            Height="30px"
-            Margin="0,0,0,100"
-            VerticalAlignment="Bottom"
-            Fill="#FF000000"/>
-        <Label
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            AllowDrop="True"
-            Content="By KAOSNox and MotzuzZz"
-            FontSize="20px"
-            Foreground="#44FFFFFF"
-            Margin="0,0,0,100"/>
+        <!--- Credits  -->
+        <Grid Height="85px" Margin="0,0,0,100" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--Rectangle Background-->
+            <Rectangle
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Fill="#FF000000"/>
+            <!---Names Background-->
+            <Label
+                Grid.Column="0"
+                Grid.Row="0"
+                FontSize="16px"
+                Foreground="#44FFFFFF"
+                Content="By KAOSNox and MotzuzZz"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalAlignment="Top"
+                VerticalContentAlignment="Top"/>
+            <!-- Add custom server Btn-->
+            <Button
+                x:Name="AddCustomServer"
+                Grid.Column="0"
+                Grid.Row="1"
+                Content="Add custom server"
+                Foreground="White"
+                FontSize="18px"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Padding="50px, 5px"
+                Background="#5A6200FF"
+                Click="AddCustomServer_Click"
+                ></Button>
+        </Grid>
+
 
         <!--Menu -->
         <Grid
@@ -177,9 +204,9 @@
             <Rectangle
                 Name="btnHoverEffect"
                 Height="100px"
-                VerticalAlignment="Bottom" 
+                VerticalAlignment="Bottom"
                 Grid.Column="0"
-            >
+                >
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#5A6200FF" Offset="1"/>
@@ -221,19 +248,20 @@
             </Button>
             <!--Btn L4D2-->
             <Button
-                 x:Name="MenuL4D2"
-                 Grid.Column="2"
-                 BorderBrush="{x:Null}"
-                 Click="MenuL4D2_Click"
-                 Foreground="{x:Null}"
-                 MouseEnter="MenuL4D2_MouseEnter"
-                 MouseLeave="MenuL4D2_MouseLeave"
-                 Margin="20,20,20,20">
+                x:Name="MenuL4D2"
+                Grid.Column="2"
+                BorderBrush="{x:Null}"
+                Click="MenuL4D2_Click"
+                Visibility="Hidden"
+                Foreground="{x:Null}"
+                MouseEnter="MenuL4D2_MouseEnter"
+                MouseLeave="MenuL4D2_MouseLeave"
+                Margin="20,20,20,20">
                 <Button.Background>
                     <ImageBrush
-             ImageSource="/img/l4d2.png"
-             Stretch="Uniform"
-             TileMode="None" />
+                        ImageSource="/img/l4d2.png"
+                        Stretch="Uniform"
+                        TileMode="None" />
                 </Button.Background>
             </Button>
         </Grid>

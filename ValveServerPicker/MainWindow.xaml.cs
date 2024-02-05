@@ -1,6 +1,5 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.Win32;
-using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -91,7 +90,7 @@ namespace ValveServerPicker
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error LoadServers");
+                
             }
         }
 
@@ -253,6 +252,9 @@ namespace ValveServerPicker
             this.Top = (screenHeight - this.Height) / 2;
         }
 
-
+        private void AddCustomServer_Click(object sender, RoutedEventArgs e)
+        {
+            new ValveCustomServerBlocker.MainWindow().Show();
+        }
     }
 }

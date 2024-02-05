@@ -1,0 +1,249 @@
+﻿<mah:MetroWindow
+    x:Class="ValveCustomServerBlocker.ServerForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="ADD VALVE SERVER CUSTOM"
+    ResizeMode="CanResize"
+    ShowCloseButton="False"
+    ShowMaxRestoreButton="False"
+    ShowMinButton="False"
+    ShowTitleBar="False"
+    Height="425"
+    Width="350">
+    <!--Added Resources -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <!--Background-->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="1,1" EndPoint="1,0">
+                <GradientStop Offset="1" Color="#FF212534" />
+                <GradientStop Offset="0" Color="#FF03031D" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <!--Row Definitions -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50px"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="60px"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--Custom Title Bar-->
+        <Grid
+            x:Name="titleBar"
+            Grid.Row="0"
+            Background="#080B11"
+            MouseLeftButtonDown="titleBar_MouseLeftButtonDown">
+            <Label
+                x:Name="Title"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="18px"
+                FontWeight="SemiBold"
+                Foreground="White" />
+            <Button
+                x:Name="btnMinimizar"
+                Width="20px"
+                Height="20px"
+                Margin="0,0,40,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="#FFFAE800"
+                BorderBrush="{x:Null}"
+                Click="btnMinimizar_MouseClick"
+                MouseEnter="btnMinimizar_MouseEnter"
+                MouseLeave="btnMinimizar_MouseLeave"
+                Style="{DynamicResource MahApps.Styles.Button.Circle}" />
+            <Button
+                x:Name="btnCerrar"
+                Width="20px"
+                Height="20px"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="#FFFC4850"
+                BorderBrush="{x:Null}"
+                Click="btnCerrar_MouseClick"
+                MouseEnter="btnCerrar_MouseEnter"
+                MouseLeave="btnCerrar_MouseLeave"
+                Style="{DynamicResource MahApps.Styles.Button.Circle}" />
+        </Grid>
+
+        <!--FORM GRID-->
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <!--SERVER NAME TEXTBOX-->
+            <Label Content="SERVER NAME"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center"
+                   Foreground="White"
+                   FontSize="20px">
+            </Label>
+            <TextBox Background="White"
+                     VerticalAlignment="Center"
+                     Margin="15px, 0px"
+                     FontSize="20px">
+            </TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="125px"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <!--IP TEXTBOX-->
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Content="IP"
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center"
+                       Foreground="White"
+                       FontSize="20px"
+                       FontWeight="Bold">
+                </Label>
+                <TextBox Grid.Row="1"
+                         Grid.Column="0"
+                         Background="White"
+                         VerticalAlignment="Center"
+                         Margin="15px, 0px"
+                         FontSize="20px">
+                </TextBox>
+                <!--PORT TEXTBOX-->
+                <Label Grid.Row="0"
+                       Grid.Column="1"
+                       Content="PORT"
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center"
+                       Foreground="White"
+                       FontSize="20px"
+                       FontWeight="Bold">
+                </Label>
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         Background="White"
+                         VerticalAlignment="Center"
+                         Margin="15px, 0px"
+                         FontSize="20px">
+                </TextBox>
+            </Grid>
+            <StackPanel Orientation="Vertical"  Margin="15px, 15px, 15px,0">
+                <!--RADIOBUTTON GAME-->
+                <Label Content="GAME"
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center"
+                       Foreground="White"
+                       FontSize="20px"
+                       FontWeight="Bold">
+                </Label>
+                <StackPanel Orientation="Vertical" >
+                    <RadioButton GroupName="Game"
+                                 Foreground="White"
+                                 FontSize="18px"
+                                 Margin="0,0,0,0"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFill="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseStroke="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPressed="White"
+                                 mah:RadioButtonHelper.ForegroundPointerOver="White"
+                                 mah:RadioButtonHelper.ForegroundPressed="White"
+                                 IsChecked="true">TF2</RadioButton>
+                    <RadioButton GroupName="Game"
+                                 Foreground="White"
+                                 FontSize="18px"
+                                 Margin="0,5px,0,0"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFill="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseStroke="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPressed="White"
+                                 mah:RadioButtonHelper.ForegroundPointerOver="White"
+                                 mah:RadioButtonHelper.ForegroundPressed="White">CS2</RadioButton>
+                    <RadioButton GroupName="Game"
+                                 Foreground="White"
+                                 FontSize="18px"
+                                 Margin="0,5px,0,0"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFill="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedFillPressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseStroke="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseCheckedStrokePressed="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPointerOver="White"
+                                 mah:RadioButtonHelper.OuterEllipseFillPressed="White"
+                                 mah:RadioButtonHelper.ForegroundPointerOver="White"
+                                 mah:RadioButtonHelper.ForegroundPressed="White">L4D2</RadioButton>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!--GRID OPTIONS-->
+        <Grid
+            Grid.Row="3">
+            <!--Background-->
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF080B11" Offset="1"/>
+                    <GradientStop Color="#FF171A21" Offset="-0.5"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <!--Columns Definitions-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <!--Save Btn-->
+            <Button
+                x:Name="SaveCustomServer"
+                Grid.Column="0"
+                ToolTip="Save">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#5A6200FF" Offset="1"/>
+                        <GradientStop Color="#000B0B24" Offset="0"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+                <iconPacks:PackIconMaterial
+                    Kind="ContentSave"
+                    Width="32"
+                    Height="32"
+                    Foreground="White"/>
+            </Button>
+            <!--Cancel Btn-->
+            <Button
+                x:Name="CancelCustomServer"
+                Grid.Column="1"
+                Background="Transparent"
+                ToolTip="Cancel">
+                <iconPacks:PackIconMaterial
+                    Kind="Cancel"
+                    Width="32"
+                    Height="32"
+                    Foreground="White"/>
+            </Button>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>

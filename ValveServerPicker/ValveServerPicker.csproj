@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -31,8 +31,11 @@
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Serilog" Version="3.0.1" />
     <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ValveCustomServerBlocker\ValveCustomServerBlocker.csproj" />
   </ItemGroup>
 
   <ItemGroup>
